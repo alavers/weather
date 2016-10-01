@@ -31,17 +31,37 @@ exports.handle = function handle(client) {
     }
   })
 
+  const collectCity = client.createStep({
+    satisfied() {
+      return Boolean(client.getConversationState().weatherCity)
+    },
+
+    prompt() {
+      // Need to prompt user for city    
+      console.log('Need to ask user for city')
+      client.done()
+    },
+  })
+
+  const provideWeather = client.createStep({
+    satisfied() {
+      return false
+    },
+
+    prompt() {
+      // Need to provide weather
+      client.done()
+    },
+  })
+
   client.runFlow({
     classifications: {
 			// map inbound message classifications to names of streams
     },
-    autoResponses: {
-      // configure responses to be automatically sent as predicted by the machine learning model
-    },
     streams: {
-      main: 'onboarding',
-      onboarding: [sayHello],
-      end: [untrained]
+      main: 'getWeather',
+      hi: [sayHello],
+      getWeather: [collectCity, provideWeather],
     }
   })
 }
