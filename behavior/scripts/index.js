@@ -94,7 +94,7 @@ exports.handle = function handle(client) {
 			// map inbound message classifications to names of streams
     },
     streams: {
-      main: 'getWeather',
+      main: 'sayHello',
       hi: [sayHello],
       getWeather: [collectCity, provideWeather],
     }
