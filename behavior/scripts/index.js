@@ -1,5 +1,15 @@
 'use strict'
 
+const firstOfEntityRole = function(message, entity, role) {
+  role = role || 'generic';
+
+  const slots = message.slots
+  const entityValues = message.slots[entity]
+  const valsForRole = entityValues ? entityValues.values_by_role[role] : null
+
+  return valsForRole ? valsForRole[0] : null
+}
+
 exports.handle = function handle(client) {
 
   const sayHello = client.createStep({
@@ -20,6 +30,29 @@ exports.handle = function handle(client) {
     }
   })
 
+  const collectCity = client.createStep({
+    satisfied() {
+      return Boolean(client.getConversationState().weatherCity)
+    },
+
+    extractInfo() {
+      const city = firstOfEntityRole(client.getMessagePart(), 'city')
+
+      if (city) {
+        client.updateConversationState({
+          weatherCity: city,
+        })
+
+        console.log('User wants the weather in:', city.value)
+      }
+    },
+
+    prompt() {
+      client.addResponse('app:response:name:prompt/weather_city')
+      client.done()
+    },
+  })
+
   const untrained = client.createStep({
     satisfied() {
       return false
@@ -33,6 +66,7 @@ exports.handle = function handle(client) {
 
   const collectCity = client.createStep({
     satisfied() {
+      console.log('is collectCity satisfied?');
       return Boolean(client.getConversationState().weatherCity)
     },
 
@@ -45,6 +79,7 @@ exports.handle = function handle(client) {
 
   const provideWeather = client.createStep({
     satisfied() {
+      console.log('is provideWeather satisfied?');
       return false
     },
 
