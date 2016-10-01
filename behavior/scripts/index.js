@@ -15,10 +15,12 @@ const firstOfEntityRole = function(message, entity, role) {
 exports.handle = function handle(client) {
   const collectCity = client.createStep({
     satisfied() {
+      console.log('checking satisfied condition for collectCity');
       return Boolean(client.getConversationState().weatherCity)
     },
 
     extractInfo() {
+     console.log('>>>extracting info for city...');
      const city = firstOfEntityRole(client.getMessagePart(), 'city')
       if (city) {
         client.updateConversationState({
