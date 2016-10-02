@@ -3,7 +3,7 @@
 const request = require('request')
 
 module.exports = function getCurrentWeather(locationName, next) {
-  const appId = '<REPLACE THIS WITH YOUR OPENWEATHERMAP API KEY>'
+  const appId = '3c8c6e8396724225af72165c1b56764c'
 
   const requestUrl = `http://api.openweathermap.org/data/2.5/weather?units=imperial&appid=${appId}&q=${locationName}`
 
