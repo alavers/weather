@@ -42,31 +42,39 @@ exports.handle = function handle(client) {
     },
 
     prompt(callback) {
-      getCurrentWeather(client.getConversationState().weatherCity.value, resultBody => {
-        if (!resultBody || resultBody.cod !== 200) {
-          console.log('Error getting weather.')
-          callback()
-          return
-        }
+      let weatherData = {
+        temperature: 60,
+        condition: 'sunny',
+        city: client.getConversationState().weatherCity.value,
+      }
 
-        const weatherDescription = (
-          resultBody.weather.length > 0 ?
-          resultBody.weather[0].description :
-          null
-        )
+      client.addResponse('app:response:name:provide_weather/current', weatherData)
+      client.done()
+      // getCurrentWeather(client.getConversationState().weatherCity.value, resultBody => {
+      //   if (!resultBody || resultBody.cod !== 200) {
+      //     console.log('Error getting weather.')
+      //     callback()
+      //     return
+      //   }
 
-        const weatherData = {
-          temperature: Math.round(resultBody.main.temp),
-          condition: weatherDescription,
-          city: resultBody.name,
-        }
+      //   const weatherDescription = (
+      //     resultBody.weather.length > 0 ?
+      //     resultBody.weather[0].description :
+      //     null
+      //   )
 
-        console.log('sending real weather:', weatherData)
-        client.addResponse('app:response:name:provide_weather/current', weatherData)
-        client.done()
+      //   const weatherData = {
+      //     temperature: Math.round(resultBody.main.temp),
+      //     condition: weatherDescription,
+      //     city: resultBody.name,
+      //   }
 
-        callback()
-      })
+      //   console.log('sending real weather:', weatherData)
+      //   client.addResponse('app:response:name:provide_weather/current', weatherData)
+      //   client.done()
+
+      //   callback()
+      // })
     },
   })
 
